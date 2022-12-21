@@ -16,6 +16,8 @@
 
 add_subdirectory(stb_image)
 
+return()
+
 if (OWL_BUILD_SAMPLES)
   find_package(glfw3 QUIET)
   set(OpenGL_GL_PREFERENCE "LEGACY")

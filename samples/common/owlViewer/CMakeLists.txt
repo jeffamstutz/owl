@@ -23,6 +23,8 @@
 #endif()
 #find_package(OpenGL QUIET)
 
+return()
+
 set(OpenGL_GL_PREFERENCE "LEGACY")
 find_package(OpenGL REQUIRED OPTIONAL_COMPONENTS OpenGL)
 

@@ -149,7 +149,7 @@ if(${CMAKE_VERSION} VERSION_GREATER_EQUAL 3.17)
   # for new cmake version, we can rely on the working cuda detection
   # mechanism
   find_package(CUDAToolkit REQUIRED)
-  target_link_libraries(owl PUBLIC CUDA::cuda_driver CUDA::cudart_static)
+  target_link_libraries(owl PUBLIC CUDA::cuda_driver CUDA::cudart)
 else()
   # for older version of cmake (where CUDAToolkit detection doesn't
   # properly work) we fall back to search paths for hardcoded library
@@ -166,7 +166,7 @@ target_include_directories(owl
     ${PROJECT_SOURCE_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/include
 )
-set_property(TARGET owl PROPERTY CUDA_ARCHITECTURES OFF) 
+set_property(TARGET owl PROPERTY CUDA_ARCHITECTURES OFF)
 
 if (WIN32)
   target_compile_definitions(owl PUBLIC -DNOMINMAX)
