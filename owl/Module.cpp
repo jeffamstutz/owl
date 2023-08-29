@@ -95,6 +95,8 @@ namespace owl {
     if (module)
       optixModuleDestroy(module);
     module = 0;
+    if (boundsModule)
+      cuModuleUnload(boundsModule);
   }
 
   /*! build the optix side of this module on this device */
@@ -108,6 +110,17 @@ namespace owl {
     char log[2048];
     size_t sizeof_log = sizeof( log );
 
+#if OPTIX_VERSION >= 70700
+    OPTIX_CHECK_LOG(optixModuleCreate(device->optixContext,
+                                      &device->moduleCompileOptions,
+                                      &device->pipelineCompileOptions,
+                                      parent->ptxCode.c_str(),
+                                      strlen(parent->ptxCode.c_str()),
+                                      log,      // Log string
+                                      &sizeof_log,// Log string sizse
+                                      &module
+                                      ));
+#else
     OPTIX_CHECK_LOG(optixModuleCreateFromPTX(device->optixContext,
                                              &device->moduleCompileOptions,
                                              &device->pipelineCompileOptions,
@@ -117,6 +130,7 @@ namespace owl {
                                              &sizeof_log,// Log string sizse
                                              &module
                                              ));
+#endif
     assert(module != nullptr);
 
     // ------------------------------------------------------------------

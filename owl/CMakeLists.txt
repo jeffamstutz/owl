@@ -112,6 +112,8 @@ target_sources(owl PRIVATE
   UserGeom.cu
   CurvesGeom.h
   CurvesGeom.cu
+  SphereGeom.h
+  SphereGeom.cu
 
   # -------------------------------------------------------
   # accel structures
@@ -126,6 +128,8 @@ target_sources(owl PRIVATE
   CurvesGeomGroup.cpp
   UserGeomGroup.h
   UserGeomGroup.cpp
+  SphereGeomGroup.h
+  SphereGeomGroup.cpp
 )
 
 set_target_properties(owl
@@ -139,7 +143,11 @@ set_target_properties(owl
 target_link_libraries(owl PUBLIC OptiX::OptiX)
 #target_link_libraries(owl PUBLIC OptiX)
 if (OWL_HAVE_TBB AND TBB_FOUND)
-  target_link_libraries(owl PUBLIC ${TBB_LIBRARIES})
+  if (TARGET TBB::tbb)
+    target_link_libraries(owl PUBLIC TBB::tbb)
+  else()
+    target_link_libraries(owl PUBLIC ${TBB_LIBRARIES})
+  endif()
   target_include_directories(owl PUBLIC ${TBB_INCLUDE_DIR})
   target_compile_definitions(owl PUBLIC -DOWL_HAVE_TBB=1)
 endif()
@@ -162,7 +170,6 @@ endif()
 
 target_include_directories(owl
   PUBLIC
-    /usr/local/cuda/include/
     ${PROJECT_SOURCE_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/include
 )
